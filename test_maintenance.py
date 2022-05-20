@@ -7,25 +7,9 @@ from cluster import Cluster
 server = os.environ["PROXMOX_HOST"]
 username = os.environ["PROXMOX_USERNAME"]
 password = os.environ["PROXMOX_PASSWORD"]
-valid_nodes = ["prox01", "prox02", "prox03"]
-valid_groups = ["any_node"]
+valid_nodes = os.environ["PROXMOX_NODES"].split(",")
+valid_groups = os.environ["PROXMOX_GROUPS"].split(",")
 
-"""
-These tests require a functioning Proxmox HA cluster, and will make changes
-to it. They _should_ be non-destructive and self-reversing, however if a test
-fails, it's possible some stray objects will remain.
-
-MUST:
-* There MUST be a Proxmox cluster configured for HA
-* The cluster MUST contain at least the nodes configured in `valid_nodes`
-* The cluster MUST contain at least one HA Group as listed in `valid_groups`
-* The cluster MUST have at least one running VM on one of the nodes
-* The cluster MUST have at least one non-running VM on one of the nodes
-
-SHOULD:
-* The cluster SHOULD have at least one LXC container on one of the nodes
-* The cluster SHOULD have at least one Pool
-"""
 
 # Create a random tag to use to reduce chance of clobbering
 def rnd(s:str = "{r}"):
